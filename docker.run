@@ -1,0 +1,7 @@
+docker run -d   --name wiki   --network snipeit   --restart unless-stopped   -e DB_TYPE=postgres   -e DB_HOST=postgres   -e DB_PORT=5432   -e DB_USER=wikijs   -e DB_PASS=wikijsrocks   -e DB_NAME=wiki -p 3000:3000  requarks/wiki:2
+
+docker run -d   --name postgres --network snipeit --network-alias db   --env POSTGRES_DB=wiki   --env POSTGRES_PASSWORD=wikijsrocks   --env POSTGRES_USER=wikijs   --log-driver "none"   --restart unless-stopped   --mount source=db-data,target=/var/lib/postgresql/data   postgres:11-alpine
+
+docker run -d --name snipeit -p 8000:80 --network snipeit --env-file=/root/docker/snipeit/.env -v /root/docker/snipeit/data:/var/lib/snipeit -v /root/docker/snipeit/config:/config --restart=unless-stopped snipe/snipe-it:v5.1.7
+
+docker run -d --name mariadb --network snipeit --network-alias db -e MYSQL_ROOT_PASSWORD=r00tp@ss -e MYSQL_USER=snipe_it_rw -e MYSQL_PASSWORD=Snip3-IT! -e MYSQL_DATABASE=snipe_it -v ~/docker/mariadb:/var/lib/mysql --restart=unless-stopped mariadb:latest
